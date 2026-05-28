@@ -1,95 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>She Can Foundation - Contact Form</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f7f7f7;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .container {
-            background: #fff;
-            padding: 2rem 2.5rem;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 400px;
-        }
-        h2 {
-            text-align: center;
-            color: #4a148c;
-        }
-        label {
-            display: block;
-            margin-top: 1rem;
-            margin-bottom: 0.3rem;
-            color: #333;
-        }
-        input, textarea {
-            width: 100%;
-            padding: 0.7rem;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 1rem;
-        }
-        button {
-            margin-top: 1.2rem;
-            width: 100%;
-            padding: 0.8rem;
-            background: #4a148c;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        button:hover {
-            background: #6a1b9a;
-        }
-        .success-message {
-            display: none;
-            text-align: center;
-            color: #388e3c;
-            font-weight: bold;
-            margin-top: 1.5rem;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>She Can Foundation Form</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; }
+    form { max-width: 400px; margin: auto; display: flex; flex-direction: column; }
+    input, textarea, button { margin: 10px 0; padding: 10px; font-size: 1em; }
+    button { background: #4CAF50; color: white; border: none; cursor: pointer; }
+    button:hover { background: #45a049; }
+    .success { color: green; font-weight: bold; text-align: center; }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Contact She Can Foundation</h2>
-        <form id="contactForm">
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" required>
+  <h2>Contact She Can Foundation</h2>
+  <form id="contactForm">
+    <label>Name:</label>
+    <input type="text" id="name" required>
+    
+    <label>Email:</label>
+    <input type="email" id="email" required>
+    
+    <label>Message:</label>
+    <textarea id="message" required></textarea>
+    
+    <button type="submit">Submit</button>
+  </form>
+  <p id="response" class="success"></p>
 
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required>
-
-            <label for="message">Message</label>
-            <textarea id="message" name="message" rows="4" required></textarea>
-
-            <button type="submit">Submit</button>
-        </form>
-        <div class="success-message" id="successMessage">
-            Form Submitted Successfully
-        </div>
-    </div>
-    <script>
-        const form = document.getElementById('contactForm');
-        const successMessage = document.getElementById('successMessage');
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            form.style.display = 'none';
-            successMessage.style.display = 'block';
-        });
-    </script>
+  <script>
+    document.getElementById("contactForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const res = await fetch("http://localhost:5000/api/submit", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: document.getElementById("name").value,
+          email: document.getElementById("email").value,
+          message: document.getElementById("message").value
+        })
+      });
+      if(res.ok) {
+        document.getElementById("response").innerText = "Form Submitted Successfully";
+      }
+    });
+  </script>
 </body>
 </html>
